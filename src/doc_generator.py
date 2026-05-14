@@ -8,7 +8,7 @@ from sentence_transformers import SentenceTransformer
 
 from diff_parser import ScenarioChange
 
-_MODEL = "gemini-2.5-flash-lite"
+_MODEL = "gemini-3.1-flash-lite-preview"
 _EMBED_MODEL = "all-MiniLM-L6-v2"
 _CORPUS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "rag_corpus")
 

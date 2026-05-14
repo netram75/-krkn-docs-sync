@@ -39,7 +39,7 @@ pip install -r requirements.txt
 ```
 
 Set secrets in your GitHub repo (Settings → Secrets → Actions):
-- `GEMINI_API_KEY` — from [Google AI Studio](https://aistudio.google.com) (free, 1500 req/day)
+- `GEMINI_API_KEY` — from [Google AI Studio](https://aistudio.google.com) (free, 500 req/day)
 - `GH_TOKEN` — GitHub token with `repo` scope (for opening PRs)
 
 ## Run Locally
@@ -74,6 +74,6 @@ This is the exact scenario that was manually documented in [PR #412](https://git
 | AST parsing | tree-sitter | 0.25.2 |
 | Semantic embeddings | sentence-transformers | ≥3.0 |
 | Vector search | faiss-cpu | 1.13.2 |
-| LLM | Gemini 2.5 Flash-Lite | — |
+| LLM | Gemini 3.1 Flash-Lite | — |
 | GitHub API | PyGithub | 2.9.1 |
 | CI | GitHub Actions | — |

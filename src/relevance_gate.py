@@ -6,7 +6,7 @@ from google.genai.errors import ClientError
 
 from diff_parser import ScenarioChange
 
-_MODEL = "gemini-2.5-flash-lite"
+_MODEL = "gemini-3.1-flash-lite-preview"
 _RETRY_DELAY = 15
 
 
