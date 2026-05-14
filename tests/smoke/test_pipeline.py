@@ -6,6 +6,7 @@ Requires GEMINI_API_KEY in environment.
 
 import os
 import sys
+import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 
@@ -52,6 +53,7 @@ def run_tests() -> None:
         else:
             failed += 1
         print(f"  [{status}] {fixture}")
+        time.sleep(4)
 
     print("\n=== negative cases (expect: not doc-relevant) ===")
     for fixture in NEGATIVE_CASES:
@@ -63,6 +65,7 @@ def run_tests() -> None:
         else:
             failed += 1
         print(f"  [{status}] {os.path.basename(fixture)}")
+        time.sleep(4)
 
     print(f"\n{passed}/{passed + failed} passed")
     if failed:
