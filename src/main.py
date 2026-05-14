@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from diff_parser import ScenarioChange, extract_symbols, parse_changed_scenarios
 from doc_generator import generate_doc
+from hugo_validator import validate
 from pr_creator import raise_pr
 from relevance_gate import is_doc_relevant
 
@@ -53,6 +54,11 @@ def run() -> None:
         print(f"\n{'='*60}")
         print(doc_content[:800])
         print(f"{'='*60}\n")
+
+        result = validate(doc_content)
+        if not result.valid:
+            print(f"[docs-sync] validation failed: {result.errors}")
+            continue
 
         print("[docs-sync] opening PR...")
         pr_url = raise_pr(change.file_path, doc_content)
