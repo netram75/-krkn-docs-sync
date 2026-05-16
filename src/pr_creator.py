@@ -2,13 +2,27 @@ import os
 
 from github import Github, GithubException
 
-_WEBSITE_REPO = "netram75/website"
+# Demo targets contributor's fork. In production, set TARGET_REPO="krkn-chaos/website".
+_WEBSITE_REPO = os.environ.get("TARGET_REPO", "netram75/website")
 _BASE_BRANCH = "main"
 
 
 def _scenario_slug(file_path: str) -> str:
     name = os.path.splitext(os.path.basename(file_path))[0]
     return name.replace("_", "-")
+
+
+def _infer_doc_category(file_path: str) -> str:
+    name = os.path.basename(file_path).lower()
+    if "hog" in name:
+        return "hog-scenarios"
+    if "network" in name or "vmi" in name:
+        return "network-chaos-ng-scenarios"
+    if "pod" in name:
+        return "pod-scenario"
+    if "node" in name:
+        return "node-scenarios"
+    return "scenarios"
 
 
 def raise_pr(file_path: str, doc_content: str) -> str:
@@ -20,30 +34,37 @@ def raise_pr(file_path: str, doc_content: str) -> str:
     repo = gh.get_repo(_WEBSITE_REPO)
 
     slug = _scenario_slug(file_path)
+    category = _infer_doc_category(file_path)
     branch_name = f"docs/auto-{slug}"
-    doc_path = f"content/en/docs/network-chaos-ng-scenarios/{slug}/_index.md"
+    doc_path = f"content/en/docs/scenarios/{category}/{slug}/_index.md"
 
-    # create branch off main
     base_sha = repo.get_branch(_BASE_BRANCH).commit.sha
     try:
         repo.create_git_ref(ref=f"refs/heads/{branch_name}", sha=base_sha)
     except GithubException as e:
         if e.status == 422:
-            # branch already exists — delete and recreate
             repo.get_git_ref(f"heads/{branch_name}").delete()
             repo.create_git_ref(ref=f"refs/heads/{branch_name}", sha=base_sha)
         else:
             raise
 
-    # commit the generated doc
-    repo.create_file(
-        path=doc_path,
-        message=f"docs(auto): add {slug} scenario documentation",
-        content=doc_content,
-        branch=branch_name,
-    )
+    try:
+        existing = repo.get_contents(doc_path, ref=branch_name)
+        repo.update_file(
+            path=doc_path,
+            message=f"docs(auto): add {slug} scenario documentation",
+            content=doc_content,
+            sha=existing.sha,
+            branch=branch_name,
+        )
+    except Exception:
+        repo.create_file(
+            path=doc_path,
+            message=f"docs(auto): add {slug} scenario documentation",
+            content=doc_content,
+            branch=branch_name,
+        )
 
-    # open PR
     pr = repo.create_pull(
         title=f"docs(auto): add {slug} scenario documentation",
         body=(

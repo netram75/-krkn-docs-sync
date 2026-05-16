@@ -1,6 +1,6 @@
 """
 Smoke tests for the docs-sync pipeline.
-3 positive cases (should be doc-relevant) + 2 negative cases (should not).
+5 positive cases (should be doc-relevant) + 3 negative cases (should not).
 Requires GEMINI_API_KEY in environment.
 """
 
@@ -19,11 +19,14 @@ POSITIVE_CASES = [
     "vmi_network_chaos.py",
     "cpu_hog_chaos.py",
     "disk_fill_chaos.py",
+    "pod_kill_chaos.py",
+    "node_cpu_hog.py",
 ]
 
 NEGATIVE_CASES = [
     os.path.join("negative", "utils_helper.py"),
     os.path.join("negative", "config_loader.py"),
+    os.path.join("negative", "base_scenario.py"),
 ]
 
 

@@ -1,5 +1,7 @@
 # krkn-docs-sync
 
+![smoke-tests](https://github.com/netram75/-krkn-docs-sync/actions/workflows/smoke-tests.yml/badge.svg)
+
 A GitHub Actions bot that detects new chaos scenarios added to krkn-chaos and automatically opens a documentation PR on [krkn-chaos/website](https://github.com/krkn-chaos/website).
 
 ## The Problem
